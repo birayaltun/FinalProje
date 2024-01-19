@@ -1,0 +1,18 @@
+---
+title: "Proje Rapor : Biray Altun 210401013"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Q1 : Problem tanımı
+
+Şirketimiz **Altun Coffee Co.**. Problemimiz *Amerika'nın tüm eyaletlerinde hizmet vermek istiyorum ancak hangi eyalette kaç tane şube açacağıma karar veremiyorum. Rastgele olarak 
+açmam beni daha işin başında batırabilir. Bir de kullanacağım kahve dükkanımın tipi ve ürün gamı heryerde birebir olmamalı.
+*. 
+
+
+
+
+
+

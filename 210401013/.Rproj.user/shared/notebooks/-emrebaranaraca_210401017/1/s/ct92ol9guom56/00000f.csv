@@ -1,0 +1,6 @@
+"0",""
+"0","# Veri setlerini birleştirme"
+"0","merged_data <- selected_data %>%"
+"0","  left_join(selected_data_2, by = ""Country"")"
+"2","Hata: 'selected_data_2' nesnesi bulunamadı
+"

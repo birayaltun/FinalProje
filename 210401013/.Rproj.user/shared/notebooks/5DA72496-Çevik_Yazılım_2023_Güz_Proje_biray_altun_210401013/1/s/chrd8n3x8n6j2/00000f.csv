@@ -1,0 +1,8 @@
+"0","# Veri dosyasını internetten indir ve git repo'sunun içine commitle"
+"0","filename <- ""state_pop_by_age_gender.csv"""
+"0","filename2 <- ""bea-gdp-by-state.csv"""
+"0",""
+"0","# Dosyayi ithal et"
+"0","library(readr)"
+"0","myDF <- read_csv(filename)"
+"0","myDF2 <- read_csv(filename2)"

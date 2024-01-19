@@ -1,0 +1,12 @@
+"0","# Gerekli kütüphaneyi yükleme"
+"0","library(ggplot2)"
+"0",""
+"0","# 2017 yılına ait sütunu kullanarak çizgi grafiği oluşturma"
+"0","ggplot(myDF2, aes(x = `Area`, y = `2017`)) +"
+"0","  geom_line(color = ""blue"") +"
+"0","  labs(title = ""2017 Yılında US Eyaletlerine Göre GDP per Capita Çizgi Grafiği"", x = ""Eyalet"", y = ""GDP per Capita"") +"
+"0","  theme_minimal() +"
+"0","  theme(axis.text.x = element_text(angle = 45, hjust = 1))"
+"2","Error in (function (filename = ""Rplot%03d.png"", width = 480, height = 480,  : 
+  unable to start png() device
+"

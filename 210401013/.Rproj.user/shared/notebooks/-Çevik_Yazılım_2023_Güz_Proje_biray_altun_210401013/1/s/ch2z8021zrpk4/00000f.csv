@@ -1,0 +1,8 @@
+"0","library(dplyr)"
+"0",""
+"0","filtered_df <- myDF %>%"
+"0","  filter(gender_group == ""Both"" & age_group == ""All"")"
+"0",""
+"0","filtered_df"
+"2","Error in gzfile(file, ""wb"") : bağlantı açılamadı
+"

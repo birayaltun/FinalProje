@@ -1,0 +1,213 @@
+---
+title: "Proje Rapor : Biray Altun 210401013"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Q1 : Problem tanımı
+
+Şirketimiz **Altun Coffee Co.**. Problemimiz *Amerika'nın tüm eyaletlerinde hizmet vermek istiyorum ancak hangi eyalette kaç tane şube açacağıma karar veremiyorum. Rastgele olarak 
+açmam beni daha işin başında batırabilir. Bir de kullanacağım kahve dükkanımın tipi ve ürün gamı heryerde birebir olmamalı.
+*. 
+
+# Q2 : Proje Amacı
+[a well managed franchise system.](https://www.kaggle.com/datasets/danbraswell/state-populations-by-youth-adulthood-and-gender)(https://www.kaggle.com/datasets/solorzano/gdp-per-capita-in-us-states) adli Kaggle veri setlerini kullanarak iş problemini *Nüfus dataseti için nüfusu 2 milyondan küçük olan eyaletlerde sadece 1 dükkan, 2 milyondan yüksek olan eyaletlerde nüfusun 2 milyonun kaç katı olduğuna bakılarak  kat sayısı kadar dükkan adedi açılabilecek.* ve **GDP dataseti için kişi başı GDP'si 50.000 $ üzeri olan yerlerde açılacak her iki dükkandan biri premium olacak, 50.000$ altı olan yerlerde ise her 3 restorandan biri premium olacak.** yöntemler kullanarak çözmeyi amaçlıyoruz. Bu sayede problemi azaltmayı / yok etmeyi ya da kar arttırımına katkıda bulunmayı planlıyoruz. 
+
+# Q3 : Veri seti keşifsel analizi
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Veri dosyasını internetten indir ve git repo'sunun içine commitle
+filename <- "state_pop_by_age_gender.csv"
+filename2 <- "bea-gdp-by-state.csv"
+
+# Dosyayi ithal et
+library(readr)
+myDF <- read_csv(filename)
+myDF2 <- read_csv(filename2)
+```
+
+Veri setlerii Kaggle web sitesinden indirilmiştir ve **readr::read_csv()** fonksiyonu kullanılarak **`r class(myDF)[[1]]`** tipinde bir değişkene ithal edilmiştir. Veri boyutları aşağıdaki gibidir :
+
+ **State Populations by Youth, Adulthood, and Gender Dataset**
+- **Satir sayisi** : `r nrow(myDF)`
+- **Sütun sayisi** : `r ncol(myDF)`
+
+ **GDP per capita in US states Dataset**
+- **Satir sayisi** : `r nrow(myDF2)`
+- **Sütun sayisi** : `r ncol(myDF2)`
+
+Veri setlerinin ön görsellemeleri aşağıda verilmiştir.
+ 
+ **State Populations by Youth, Adulthood, and Gender Dataset**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+myDF
+```
+ **GDP per capita in US states Dataset**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+myDF2
+```
+
+Nüfus verilerinin dağılımı aşağıdaki histogramda gösterilmiştir.
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+#hist(myDF$population, breaks = 60)
+
+Top_5=myDF%>%
+group_by(state)%>%
+summarise(population = sum(population))%>%
+arrange(desc(population))
+
+
+
+Top_5 <- Top_5[-1, ]
+
+
+Top_5=Top_5 %>%
+head(5)
+
+Top_5$state=as.factor(Top_5$state)
+par(mar = c(10, 10, 2, 2)) 
+# Grafik çizimi vvvv
+plot(Top_5$state, Top_5$population, col = "skyblue", main = "Top 5 City by Population", xlab = "Şehir Adı", ylab = "Toplam Nüfus",las=2,col.lab = "green", col.main = "darkblue")
+```
+
+# Q4 : Veri seti ön işlemesi
+
+ **State Populations by Youth, Adulthood, and Gender Dataset**  tablosunda age_group=All olan ve gender_group=Both olan sütunları kullanacağım.
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+
+selected_data <- myDF %>%
+filter(gender_group == "Both" & age_group == "All")%>%
+select(population,state)
+selected_data
+
+
+#filtered_df <- myDF %>%
+ # filter(gender_group == "Both" & age_group == "All")
+
+#filtered_df
+```
+
+  **GDP per capita in US states Dataset** tablosunda sadece 2017 yılına ait GDP değerlerini ve Area kısımı ayrı bir tablo gibi ayıklandı.
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+selected_data2 <- myDF2 %>%
+    select(Area,`2017`)
+selected_data2
+
+```
+
+ Tablolarda ham veri setleri okundu ve aşağıdaki adımlar uygulandı :
+ *state ve Area sütununu faktör tipine çevir*
+ *Eksik veri temizleme*
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+# Ham veri setini oku
+# Veri dosyasını internetten indir ve git repo'sunun içine commitle
+filename <- "state_pop_by_age_gender.csv"
+filename2 <- "bea-gdp-by-state.csv"
+
+# Dosyayi ithal et
+library(readr)
+
+
+# Örnek ön işleme adımları
+
+# 1. state ve Area sütununu faktör tipine çevir
+selected_data$state <- as.factor(selected_data$state)
+selected_data2$Area <- as.factor(selected_data2$Area)
+```
+
+**Ön İşleme Raporu: State Populations by Youth, Adulthood, Gender Dataset and GDP per capita in US states Dataset**
+
+state and Area Sütunu:
+Ham veri setindeki state ve Area sütunu faktör tipine çevrildi.
+
+# Q5 : Veri mühendisliği
+
+**İki tablonun ülkeler bazında işlenebilmesi için birleştirildi ve yeni oluşan tablo aşağıdaki gibi oluşmuştur.**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# Veri setlerini birleştirme
+library(dplyr)
+
+selected_data2 <- myDF2 %>%
+    select(Area,`2017`)%>%
+    rename(state=Area)
+
+merged_data <- merge(x=selected_data,y=selected_data2,by="state",all.x = TRUE)
+
+# Örnek gösterim Birleştirilmiş
+merged_data
+```
+
+# Q6 : Veri analizi
+
+
+**Eyaletlerin Nüfuslarına ve GDP lerine Göre Kaç tane ve Hangi Tipte Dükkan Açılabileceğini Gösteren Tablo.**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# calculate_store_count fonksiyonunu güncelleyin
+calculate_store_count <- function(data) {
+  # "United States (States and DC)" satırını filtreleyin
+  data <- filter(data, state != "United States (States and DC)")
+
+  # Nüfusu 2 milyondan küçük olan eyaletlerde sadece 1 dükkan, 
+  # 2 milyondan yüksek olan eyaletlerde nüfusun 2 milyonun kaç katı olduğuna bakılarak kat sayısı kadar dükkan adedi açılabilir.
+  result <- data %>%
+    mutate(store_count = ifelse(population < 2000000, 1, ceiling(population / 2000000)),
+           premium_count = ifelse(`2017` >= 50000, ceiling(store_count / 2), 0),
+           regular_count = store_count - premium_count) %>%
+    select(state, store_count, premium_count, regular_count)
+  
+  # Ara sonuçları yazdır
+  print(result)
+  
+  return(result)
+}
+
+# calculate_store_count fonksiyonunu kullanarak dükkân sayılarını hesapla
+store_counts <- calculate_store_count(merged_data)
+
+```
+
+**Eyaletlerin Nüfuslarına Göre Kaç tane Dükkan Açabileceğimi Gösteren Grafik.**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+# Fonksiyon tanımı
+calculate_store_count <- function(data) {
+  # "United States (States and DC)" sütununu filtrele
+  data <- filter(data, state != "United States (States and DC)")
+
+  # Nüfusu 2 milyondan küçük olan eyaletlerde sadece 1 dükkan, 
+  # 2 milyondan yüksek olan eyaletlerde nüfusun 2 milyonun kaç katı olduğuna bakılarak kat sayısı kadar dükkan adedi açılabilir.
+  result <- data %>%
+    mutate(store_count = ifelse(population < 2000000, 1, ceiling(population / 2000000))) %>%
+    select(state, population, store_count)
+  
+  return(result)
+}
+
+# Veri setini birleştirme (merged_data kullanılarak)
+merged_store_counts <- calculate_store_count(merged_data)
+
+
+
+# Grafik oluşturma
+ggplot(merged_store_counts, aes(x = state, y = store_count, fill = state)) +
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Eyaletlere Göre Hesaplanan Dükkan Sayısı", x = "Eyalet", y = "Dükkan Sayısı") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1,size = 1))  # X ekseni etiketlerini 45 derece açılı olarak gösterme 
+
+```
+
+
+
+
+
+
