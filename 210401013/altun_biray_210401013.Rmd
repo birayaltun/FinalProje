@@ -12,6 +12,10 @@ açmam beni daha işin başında batırabilir. Bir de kullanacağım kahve dükk
 *. 
 
 
+# Q2 : Proje Amacı
+[a well managed franchise system.](https://www.kaggle.com/datasets/danbraswell/state-populations-by-youth-adulthood-and-gender)(https://www.kaggle.com/datasets/solorzano/gdp-per-capita-in-us-states) adli Kaggle veri setlerini kullanarak iş problemini *Nüfus dataseti için nüfusu 2 milyondan küçük olan eyaletlerde sadece 1 dükkan, 2 milyondan yüksek olan eyaletlerde nüfusun 2 milyonun kaç katı olduğuna bakılarak  kat sayısı kadar dükkan adedi açılabilecek.* ve **GDP dataseti için kişi başı GDP'si 50.000 $ üzeri olan yerlerde açılacak her iki dükkandan biri premium olacak, 50.000$ altı olan yerlerde ise her 3 restorandan biri premium olacak.** yöntemler kullanarak çözmeyi amaçlıyoruz. Bu sayede problemi azaltmayı / yok etmeyi ya da kar arttırımına katkıda bulunmayı planlıyoruz. 
+
+
 
 
 
