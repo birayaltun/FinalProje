@@ -130,6 +130,25 @@ state and Area Sütunu:
 Ham veri setindeki state ve Area sütunu faktör tipine çevrildi.
 
 
+# Q5 : Veri mühendisliği
+
+**İki tablonun ülkeler bazında işlenebilmesi için birleştirildi ve yeni oluşan tablo aşağıdaki gibi oluşmuştur.**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# Veri setlerini birleştirme
+library(dplyr)
+
+selected_data2 <- myDF2 %>%
+    select(Area,`2017`)%>%
+    rename(state=Area)
+
+merged_data <- merge(x=selected_data,y=selected_data2,by="state",all.x = TRUE)
+
+# Örnek gösterim Birleştirilmiş
+merged_data
+```
+
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 library(testthat)
 source("Q3_tests_altun_biray_210401013.R")
