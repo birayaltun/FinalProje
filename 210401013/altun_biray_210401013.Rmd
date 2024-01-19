@@ -206,6 +206,29 @@ ggplot(merged_store_counts, aes(x = state, y = store_count, fill = state)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1,size = 1))  # X ekseni etiketlerini 45 derece açılı olarak gösterme 
 
 ```
+# Q7 : Sonuç değerlendirme, tavsiyeler:
+
+Nüfus üzerine istatistikleri içeren Datasetten istenilen sütunlar ayıklandı.
+
+GDP üzerine istatistikleri içeren Datasetten istenilen sütunlar ayıklandı.
+
+İki dataset birleştirildi.
+
+
+Uygun fonksiyonlar ve problemin çözümünde bahsedilen algoritmalar kullanılarak eyaletlerin nüfusunu
+baz alıp hangi eyalette kaç adet kahve dükkanı açılması gerektiğini gösteren grafik ve tablo elde edildi.
+
+
+Uygun fonksiyonlar ve problemin çözümünde bahsedilen algoritmalar kullanılarak eyaletlerin GDP değerlerini baz alıp eyaletlerde açılacak kahve dükkanlarının kaçının premium kaçının normal olacağı bulundu.Tablo ile gösterildi.
+
+
+Bu sonuçlar neticesinde Altun Coffee Co.tüm Amerikan eyaletlerinde faaliyet gösterebilmesi için ve 
+Franchise sistemi için gerekli olan tüm bilgilere sahip, görsellerle zenginleştirilmiş bu istatistikler şirketin geleceği açısından oldukça önemli.
+
+
+Bu çalışmanın gelecekte daha iyi bir sonuç çıkarması için nüfus ve GDP ye ek olarak Amerikan eyaletlerindeki insanların yiyecek tüketim alışkanlıklarını içeren bir başka dataset ile daha
+iyi performans sunan bir franchise sistemi geliştirilebilir.
+
 
 
 
