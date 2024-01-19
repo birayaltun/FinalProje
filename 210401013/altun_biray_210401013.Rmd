@@ -147,14 +147,77 @@ merged_data <- merge(x=selected_data,y=selected_data2,by="state",all.x = TRUE)
 # Örnek gösterim Birleştirilmiş
 merged_data
 ```
+# Q6 : Veri analizi
+
+
+**Eyaletlerin Nüfuslarına ve GDP lerine Göre Kaç tane ve Hangi Tipte Dükkan Açılabileceğini Gösteren Tablo.**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# calculate_store_count fonksiyonunu güncelleyin
+calculate_store_count <- function(data) {
+  # "United States (States and DC)" satırını filtreleyin
+  data <- filter(data, state != "United States (States and DC)")
+
+  # Nüfusu 2 milyondan küçük olan eyaletlerde sadece 1 dükkan, 
+  # 2 milyondan yüksek olan eyaletlerde nüfusun 2 milyonun kaç katı olduğuna bakılarak kat sayısı kadar dükkan adedi açılabilir.
+  result <- data %>%
+    mutate(store_count = ifelse(population < 2000000, 1, ceiling(population / 2000000)),
+           premium_count = ifelse(`2017` >= 50000, ceiling(store_count / 2), 0),
+           regular_count = store_count - premium_count) %>%
+    select(state, store_count, premium_count, regular_count)
+  
+  # Ara sonuçları yazdır
+  print(result)
+  
+  return(result)
+}
+
+# calculate_store_count fonksiyonunu kullanarak dükkân sayılarını hesapla
+store_counts <- calculate_store_count(merged_data)
+
+```
+
+**Eyaletlerin Nüfuslarına Göre Kaç tane Dükkan Açabileceğimi Gösteren Grafik.**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+# Fonksiyon tanımı
+calculate_store_count <- function(data) {
+  # "United States (States and DC)" sütununu filtrele
+  data <- filter(data, state != "United States (States and DC)")
+
+  # Nüfusu 2 milyondan küçük olan eyaletlerde sadece 1 dükkan, 
+  # 2 milyondan yüksek olan eyaletlerde nüfusun 2 milyonun kaç katı olduğuna bakılarak kat sayısı kadar dükkan adedi açılabilir.
+  result <- data %>%
+    mutate(store_count = ifelse(population < 2000000, 1, ceiling(population / 2000000))) %>%
+    select(state, population, store_count)
+  
+  return(result)
+}
+
+# Veri setini birleştirme (merged_data kullanılarak)
+merged_store_counts <- calculate_store_count(merged_data)
+
+
+
+# Grafik oluşturma
+ggplot(merged_store_counts, aes(x = state, y = store_count, fill = state)) +
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Eyaletlere Göre Hesaplanan Dükkan Sayısı", x = "Eyalet", y = "Dükkan Sayısı") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1,size = 1))  # X ekseni etiketlerini 45 derece açılı olarak gösterme 
+
+```
+
+
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 library(testthat)
 source("Q3_tests_altun_biray_210401013.R")
 source("Q4_tests_altun_biray_210401013.R")
+source("Q5_tests_altun_biray_210401013.R")
 
 ```
+
 
 
 
