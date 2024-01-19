@@ -16,6 +16,69 @@ açmam beni daha işin başında batırabilir. Bir de kullanacağım kahve dükk
 [a well managed franchise system.](https://www.kaggle.com/datasets/danbraswell/state-populations-by-youth-adulthood-and-gender)(https://www.kaggle.com/datasets/solorzano/gdp-per-capita-in-us-states) adli Kaggle veri setlerini kullanarak iş problemini *Nüfus dataseti için nüfusu 2 milyondan küçük olan eyaletlerde sadece 1 dükkan, 2 milyondan yüksek olan eyaletlerde nüfusun 2 milyonun kaç katı olduğuna bakılarak  kat sayısı kadar dükkan adedi açılabilecek.* ve **GDP dataseti için kişi başı GDP'si 50.000 $ üzeri olan yerlerde açılacak her iki dükkandan biri premium olacak, 50.000$ altı olan yerlerde ise her 3 restorandan biri premium olacak.** yöntemler kullanarak çözmeyi amaçlıyoruz. Bu sayede problemi azaltmayı / yok etmeyi ya da kar arttırımına katkıda bulunmayı planlıyoruz. 
 
 
+# Q3 : Veri seti keşifsel analizi
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Veri dosyasını internetten indir ve git repo'sunun içine commitle
+filename <- "state_pop_by_age_gender.csv"
+filename2 <- "bea-gdp-by-state.csv"
+
+# Dosyayi ithal et
+library(readr)
+myDF <- read_csv(filename)
+myDF2 <- read_csv(filename2)
+```
+
+Veri setlerii Kaggle web sitesinden indirilmiştir ve **readr::read_csv()** fonksiyonu kullanılarak **`r class(myDF)[[1]]`** tipinde bir değişkene ithal edilmiştir. Veri boyutları aşağıdaki gibidir :
+
+ **State Populations by Youth, Adulthood, and Gender Dataset**
+- **Satir sayisi** : `r nrow(myDF)`
+- **Sütun sayisi** : `r ncol(myDF)`
+
+ **GDP per capita in US states Dataset**
+- **Satir sayisi** : `r nrow(myDF2)`
+- **Sütun sayisi** : `r ncol(myDF2)`
+
+Veri setlerinin ön görsellemeleri aşağıda verilmiştir.
+ 
+ **State Populations by Youth, Adulthood, and Gender Dataset**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+myDF
+```
+ **GDP per capita in US states Dataset**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+myDF2
+```
+
+Nüfus verilerinin dağılımı aşağıdaki histogramda gösterilmiştir.
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+#hist(myDF$population, breaks = 60)
+
+Top_5=myDF%>%
+group_by(state)%>%
+summarise(population = sum(population))%>%
+arrange(desc(population))
+
+
+
+Top_5 <- Top_5[-1, ]
+
+
+Top_5=Top_5 %>%
+head(5)
+
+Top_5$state=as.factor(Top_5$state)
+par(mar = c(10, 10, 2, 2)) 
+# Grafik çizimi vvvv
+plot(Top_5$state, Top_5$population, col = "skyblue", main = "Top 5 City by Population", xlab = "Şehir Adı", ylab = "Toplam Nüfus",las=2,col.lab = "green", col.main = "darkblue")
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+library(testthat)
+source("Q3_tests_altun_biray_210401013.R")
+
+```
+
 
 
 
