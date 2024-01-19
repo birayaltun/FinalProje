@@ -15,7 +15,6 @@ açmam beni daha işin başında batırabilir. Bir de kullanacağım kahve dükk
 # Q2 : Proje Amacı
 [a well managed franchise system.](https://www.kaggle.com/datasets/danbraswell/state-populations-by-youth-adulthood-and-gender)(https://www.kaggle.com/datasets/solorzano/gdp-per-capita-in-us-states) adli Kaggle veri setlerini kullanarak iş problemini *Nüfus dataseti için nüfusu 2 milyondan küçük olan eyaletlerde sadece 1 dükkan, 2 milyondan yüksek olan eyaletlerde nüfusun 2 milyonun kaç katı olduğuna bakılarak  kat sayısı kadar dükkan adedi açılabilecek.* ve **GDP dataseti için kişi başı GDP'si 50.000 $ üzeri olan yerlerde açılacak her iki dükkandan biri premium olacak, 50.000$ altı olan yerlerde ise her 3 restorandan biri premium olacak.** yöntemler kullanarak çözmeyi amaçlıyoruz. Bu sayede problemi azaltmayı / yok etmeyi ya da kar arttırımına katkıda bulunmayı planlıyoruz. 
 
-
 # Q3 : Veri seti keşifsel analizi
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -73,12 +72,70 @@ par(mar = c(10, 10, 2, 2))
 # Grafik çizimi vvvv
 plot(Top_5$state, Top_5$population, col = "skyblue", main = "Top 5 City by Population", xlab = "Şehir Adı", ylab = "Toplam Nüfus",las=2,col.lab = "green", col.main = "darkblue")
 ```
-```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
-library(testthat)
-source("Q3_tests_altun_biray_210401013.R")
+
+# Q4 : Veri seti ön işlemesi
+
+ **State Populations by Youth, Adulthood, and Gender Dataset**  tablosunda age_group=All olan ve gender_group=Both olan sütunları kullanacağım.
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+
+selected_data <- myDF %>%
+filter(gender_group == "Both" & age_group == "All")%>%
+select(population,state)
+selected_data
+
+
+#filtered_df <- myDF %>%
+ # filter(gender_group == "Both" & age_group == "All")
+
+#filtered_df
+```
+
+  **GDP per capita in US states Dataset** tablosunda sadece 2017 yılına ait GDP değerlerini ve Area kısımı ayrı bir tablo gibi ayıklandı.
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+selected_data2 <- myDF2 %>%
+    select(Area,`2017`)
+selected_data2
 
 ```
 
+ Tablolarda ham veri setleri okundu ve aşağıdaki adımlar uygulandı :
+ *state ve Area sütununu faktör tipine çevir*
+ *Eksik veri temizleme*
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+# Ham veri setini oku
+# Veri dosyasını internetten indir ve git repo'sunun içine commitle
+filename <- "state_pop_by_age_gender.csv"
+filename2 <- "bea-gdp-by-state.csv"
+
+# Dosyayi ithal et
+library(readr)
+
+
+# Örnek ön işleme adımları
+
+# 1. state ve Area sütununu faktör tipine çevir
+selected_data$state <- as.factor(selected_data$state)
+selected_data2$Area <- as.factor(selected_data2$Area)
+```
+
+**Ön İşleme Raporu: State Populations by Youth, Adulthood, Gender Dataset and GDP per capita in US states Dataset**
+
+state and Area Sütunu:
+Ham veri setindeki state ve Area sütunu faktör tipine çevrildi.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+library(testthat)
+source("Q3_tests_altun_biray_210401013.R")
+source("Q4_tests_altun_biray_210401013.R")
+
+```
 
 
 
